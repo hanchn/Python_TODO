@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}编辑学生 - 学生管理系统{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-pencil"></i> 编辑学生信息
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="student_id" class="form-label">学号</label>
+                                <input type="text" class="form-control" id="student_id" 
+                                       value="{{ student.student_id }}" readonly 
+                                       style="background-color: #f8f9fa;">
+                                <small class="form-text text-muted">学号不可修改</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">姓名 <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="name" name="name" 
+                                       required maxlength="50" value="{{ student.name }}">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="gender" class="form-label">性别 <span class="text-danger">*</span></label>
+                                <select class="form-select" id="gender" name="gender" required>
+                                    <option value="男" {{ 'selected' if student.gender == '男' else '' }}>男</option>
+                                    <option value="女" {{ 'selected' if student.gender == '女' else '' }}>女</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="age" class="form-label">年龄 <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="age" name="age" 
+                                       required min="16" max="100" value="{{ student.age }}">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="major" class="form-label">专业 <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="major" name="major" 
+                                       required maxlength="100" value="{{ student.major }}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="grade" class="form-label">年级 <span class="text-danger">*</span></label>
+                                <select class="form-select" id="grade" name="grade" required>
+                                    <option value="2024级" {{ 'selected' if student.grade == '2024级' else '' }}>2024级</option>
+                                    <option value="2023级" {{ 'selected' if student.grade == '2023级' else '' }}>2023级</option>
+                                    <option value="2022级" {{ 'selected' if student.grade == '2022级' else '' }}>2022级</option>
+                                    <option value="2021级" {{ 'selected' if student.grade == '2021级' else '' }}>2021级</option>
+                                    <option value="2020级" {{ 'selected' if student.grade == '2020级' else '' }}>2020级</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">电话号码</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" 
+                                       maxlength="20" value="{{ student.phone or '' }}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">邮箱</label>
+                                <input type="email" class="form-control" id="email" name="email" 
+                                       maxlength="100" value="{{ student.email or '' }}">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="address" class="form-label">地址</label>
+                        <textarea class="form-control" id="address" name="address" rows="3">{{ student.address or '' }}</textarea>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('student.index') }}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> 返回列表
+                        </a>
+                        <div>
+                            <a href="{{ url_for('student.view', id=student.id) }}" class="btn btn-info me-2">
+                                <i class="bi bi-eye"></i> 查看详情
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i> 保存修改
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// 表单验证
+document.addEventListener('DOMContentLoaded', function() {
+    const phoneInput = document.getElementById('phone');
+    
+    // 电话号码格式验证
+    phoneInput.addEventListener('input', function() {
+        const value = this.value;
+        if (value && !/^[0-9\-\+\s\(\)]+$/.test(value)) {
+            this.setCustomValidity('请输入有效的电话号码');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
+});
+</script>
+{% endblock %}
