@@ -15,7 +15,7 @@
                         <i class="bi bi-pencil"></i> 编辑
                     </a>
                     <button type="button" class="btn btn-danger btn-sm" 
-                            onclick="confirmDelete({{ student.id }}, '{{ student.name }}')">
+                            onclick="confirmDelete({{ student.id }}, '{{ student.name|replace("'", "\\'")|safe }}')">
                         <i class="bi bi-trash"></i> 删除
                     </button>
                 </div>

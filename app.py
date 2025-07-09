@@ -1,32 +1,15 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-import os
+from config import app, db
 
-# 创建Flask应用实例
-app = Flask(__name__)
+# 导入模型和路由
+from models.student import Student
+from controllers.student_controller import student_bp
 
-# 配置数据库
-basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(basedir, "student_management.db")}'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'your-secret-key-here'
+# 注册蓝图
+app.register_blueprint(student_bp)
 
-# 初始化扩展
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-
-# 避免循环导入，在应用上下文中导入
+# 创建数据库表
 with app.app_context():
-    # 导入模型和路由
-    from models.student import Student
-    from controllers.student_controller import student_bp
-    
-    # 注册蓝图
-    app.register_blueprint(student_bp)
-    
-    # 创建数据库表
     db.create_all()
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=8000)
