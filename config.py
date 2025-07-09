@@ -15,18 +15,3 @@ app.config['SECRET_KEY'] = 'your-secret-key-here'
 # 初始化扩展
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-
-# 避免循环导入，在应用上下文中导入
-with app.app_context():
-    # 导入模型和路由
-    from models.student import Student
-    from controllers.student_controller import student_bp
-    
-    # 注册蓝图
-    app.register_blueprint(student_bp)
-    
-    # 创建数据库表
-    db.create_all()
-
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
