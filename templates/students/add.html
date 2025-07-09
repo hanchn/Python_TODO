@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}添加学生 - 学生管理系统{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-plus-circle"></i> 添加学生
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="student_id" class="form-label">学号 <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="student_id" name="student_id" 
+                                       required maxlength="20" placeholder="请输入学号">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">姓名 <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="name" name="name" 
+                                       required maxlength="50" placeholder="请输入姓名">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="gender" class="form-label">性别 <span class="text-danger">*</span></label>
+                                <select class="form-select" id="gender" name="gender" required>
+                                    <option value="">请选择性别</option>
+                                    <option value="男">男</option>
+                                    <option value="女">女</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="age" class="form-label">年龄 <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="age" name="age" 
+                                       required min="16" max="100" placeholder="请输入年龄">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="major" class="form-label">专业 <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="major" name="major" 
+                                       required maxlength="100" placeholder="请输入专业">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="grade" class="form-label">年级 <span class="text-danger">*</span></label>
+                                <select class="form-select" id="grade" name="grade" required>
+                                    <option value="">请选择年级</option>
+                                    <option value="2024级">2024级</option>
+                                    <option value="2023级">2023级</option>
+                                    <option value="2022级">2022级</option>
+                                    <option value="2021级">2021级</option>
+                                    <option value="2020级">2020级</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">电话号码</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" 
+                                       maxlength="20" placeholder="请输入电话号码">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">邮箱</label>
+                                <input type="email" class="form-control" id="email" name="email" 
+                                       maxlength="100" placeholder="请输入邮箱地址">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="address" class="form-label">地址</label>
+                        <textarea class="form-control" id="address" name="address" rows="3" 
+                                  placeholder="请输入详细地址"></textarea>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('student.index') }}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> 返回列表
+                        </a>
+                        <div>
+                            <button type="reset" class="btn btn-outline-secondary me-2">
+                                <i class="bi bi-arrow-clockwise"></i> 重置
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i> 添加学生
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// 表单验证
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const studentIdInput = document.getElementById('student_id');
+    const phoneInput = document.getElementById('phone');
+    
+    // 学号格式验证
+    studentIdInput.addEventListener('input', function() {
+        const value = this.value;
+        if (value && !/^[A-Za-z0-9]+$/.test(value)) {
+            this.setCustomValidity('学号只能包含字母和数字');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
+    
+    // 电话号码格式验证
+    phoneInput.addEventListener('input', function() {
+        const value = this.value;
+        if (value && !/^[0-9\-\+\s\(\)]+$/.test(value)) {
+            this.setCustomValidity('请输入有效的电话号码');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
+});
+</script>
+{% endblock %}
