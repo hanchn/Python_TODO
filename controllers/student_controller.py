@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from models.student import Student
-from app import db
+from config import db
 
 # 创建蓝图
 student_bp = Blueprint('student', __name__, url_prefix='/students')
