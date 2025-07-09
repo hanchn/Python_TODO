@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block title %}学生详情 - 学生管理系统{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="bi bi-person-circle"></i> 学生详情
+                </h5>
+                <div>
+                    <a href="{{ url_for('student.edit', id=student.id) }}" class="btn btn-warning btn-sm">
+                        <i class="bi bi-pencil"></i> 编辑
+                    </a>
+                    <button type="button" class="btn btn-danger btn-sm" 
+                            onclick="confirmDelete({{ student.id }}, '{{ student.name }}')">
+                        <i class="bi bi-trash"></i> 删除
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">学号</label>
+                            <p class="form-control-plaintext">{{ student.student_id }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">姓名</label>
+                            <p class="form-control-plaintext">{{ student.name }}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">性别</label>
+                            <p class="form-control-plaintext">
+                                <span class="badge bg-{{ 'primary' if student.gender == '男' else 'danger' }}">
+                                    {{ student.gender }}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">年龄</label>
+                            <p class="form-control-plaintext">{{ student.age }} 岁</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">专业</label>
+                            <p class="form-control-plaintext">{{ student.major }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">年级</label>
+                            <p class="form-control-plaintext">
+                                <span class="badge bg-info">{{ student.grade }}</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">电话号码</label>
+                            <p class="form-control-plaintext">
+                                {% if student.phone %}
+                                    <a href="tel:{{ student.phone }}" class="text-decoration-none">
+                                        <i class="bi bi-telephone"></i> {{ student.phone }}
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted">未填写</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">邮箱</label>
+                            <p class="form-control-plaintext">
+                                {% if student.email %}
+                                    <a href="mailto:{{ student.email }}" class="text-decoration-none">
+                                        <i class="bi bi-envelope"></i> {{ student.email }}
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted">未填写</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">地址</label>
+                    <p class="form-control-plaintext">
+                        {% if student.address %}
+                            <i class="bi bi-geo-alt"></i> {{ student.address }}
+                        {% else %}
+                            <span class="text-muted">未填写</span>
+                        {% endif %}
+                    </p>
+                </div>
+                
+                <hr>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">创建时间</label>
+                            <p class="form-control-plaintext">
+                                <small class="text-muted">
+                                    <i class="bi bi-calendar-plus"></i> 
+                                    {{ student.created_at.strftime('%Y-%m-%d %H:%M:%S') if student.created_at else '未知' }}
+                                </small>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">更新时间</label>
+                            <p class="form-control-plaintext">
+                                <small class="text-muted">
+                                    <i class="bi bi-calendar-check"></i> 
+                                    {{ student.updated_at.strftime('%Y-%m-%d %H:%M:%S') if student.updated_at else '未知' }}
+                                </small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-between">
+                    <a href="{{ url_for('student.index') }}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> 返回列表
+                    </a>
+                    <a href="{{ url_for('student.edit', id=student.id) }}" class="btn btn-primary">
+                        <i class="bi bi-pencil"></i> 编辑信息
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 删除确认模态框 -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">确认删除</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>确定要删除学生 <strong id="studentName"></strong> 吗？</p>
+                <p class="text-danger">此操作不可撤销！</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <form id="deleteForm" method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">确认删除</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function confirmDelete(studentId, studentName) {
+    document.getElementById('studentName').textContent = studentName;
+    document.getElementById('deleteForm').action = '/students/delete/' + studentId;
+    new bootstrap.Modal(document.getElementById('deleteModal')).show();
+}
+</script>
+{% endblock %}
